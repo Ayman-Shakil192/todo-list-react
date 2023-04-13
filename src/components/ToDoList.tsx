@@ -1,12 +1,13 @@
 import { useState } from "react";
 import ProTable, { ProColumns } from "@ant-design/pro-table";
 import { EditOutlined, ReloadOutlined } from "@ant-design/icons";
-import { dummyData } from "./dummyData";
+import { dummyData } from "../dummyData";
 import { columns } from "../columns";
 import AddTask, { Task } from "./AddTask";
 import DeleteTask from "./DeleteTask";
 import { message } from "antd";
 import { Input } from "antd";
+import React from "react";
 
 export interface ToDoItem {
   key: string | number;
@@ -56,14 +57,17 @@ const ToDoList = () => {
     width: 150,
     render: (_text, record, _, action) => {
       return (
-        <>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-evenly",
+            alignItems: "center",
+          }}
+        >
           <a
             key="editable"
             onClick={() => {
               action?.startEditable?.(record.key);
-            }}
-            style={{
-              marginRight: 16,
             }}
           >
             Edit
@@ -74,20 +78,29 @@ const ToDoList = () => {
             onDelete={handleTaskDeleted}
             taskId={record.key}
           />
-        </>
+        </div>
       );
     },
   };
 
   const onSearch = (value: string) => {
     console.log("Search value: ", value);
-    const filteredDataSource = dataSource.filter(
+    const filteredDataSource = dummyData.filter(
       (task) =>
         task.title.toLowerCase().includes(value.toLowerCase()) ||
         task.description.toLowerCase().includes(value.toLowerCase())
     );
     console.log("Filtered data source: ", filteredDataSource);
     setDataSource(filteredDataSource);
+  };
+
+  const handleReload = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setDataSource(dummyData);
+      setLoading(false);
+      message.success("Tasks reloaded");
+    }, 1000);
   };
 
   return (
@@ -121,23 +134,18 @@ const ToDoList = () => {
               </div>
               <div
                 style={{
-                  padding: 10,
+                  marginLeft: 10,
                 }}
               >
-                <ReloadOutlined
-                  onClick={() => {
-                    setDataSource(dummyData);
-                    message.success("Tasks reloaded");
-                  }}
-                />
+                <ReloadOutlined onClick={handleReload} />
               </div>
             </div>
           </div>,
         ]}
         options={{
-          setting: false,
+          setting: true,
           fullScreen: false,
-          density: false,
+          density: true,
           reload: false,
         }}
         search={false}
