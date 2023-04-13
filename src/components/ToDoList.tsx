@@ -1,11 +1,12 @@
 import { useState } from "react";
 import ProTable, { ProColumns } from "@ant-design/pro-table";
+import { EditOutlined, ReloadOutlined } from "@ant-design/icons";
 import { dummyData } from "./dummyData";
 import { columns } from "../columns";
 import AddTask, { Task } from "./AddTask";
 import DeleteTask from "./DeleteTask";
 import { message } from "antd";
-import { EditOutlined } from "@ant-design/icons";
+import { Input } from "antd";
 
 export interface ToDoItem {
   key: string | number;
@@ -16,6 +17,8 @@ export interface ToDoItem {
   tags?: string[];
   status: string;
 }
+
+const { Search } = Input;
 
 const ToDoList = () => {
   const [dataSource, setDataSource] = useState<ToDoItem[]>(dummyData);
@@ -76,23 +79,70 @@ const ToDoList = () => {
     },
   };
 
+  const onSearch = (value: string) => {
+    console.log("Search value: ", value);
+    const filteredDataSource = dataSource.filter(
+      (task) =>
+        task.title.toLowerCase().includes(value.toLowerCase()) ||
+        task.description.toLowerCase().includes(value.toLowerCase())
+    );
+    console.log("Filtered data source: ", filteredDataSource);
+    setDataSource(filteredDataSource);
+  };
+
   return (
     <>
       <ProTable<ToDoItem>
         columns={[...columns, actionColumn]}
         rowKey="key"
-        search={false}
         loading={loading}
-        toolBarRender={() => [<AddTask onTaskAdded={handleTaskAdded} />]}
+        toolBarRender={() => [
+          <div
+            style={{
+              display: "flex",
+            }}
+          >
+            <div>
+              <Search
+                placeholder="Search for tasks"
+                onSearch={onSearch}
+                size="large"
+              />
+            </div>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                marginLeft: 20,
+              }}
+            >
+              <div>
+                <AddTask onTaskAdded={handleTaskAdded} />
+              </div>
+              <div
+                style={{
+                  padding: 10,
+                }}
+              >
+                <ReloadOutlined
+                  onClick={() => {
+                    setDataSource(dummyData);
+                    message.success("Tasks reloaded");
+                  }}
+                />
+              </div>
+            </div>
+          </div>,
+        ]}
         options={{
-          search: true,
-          setting: true,
-          fullScreen: true,
-          density: true,
-          reload: true,
+          setting: false,
+          fullScreen: false,
+          density: false,
+          reload: false,
         }}
+        search={false}
         pagination={{
-          pageSize: 5,
+          pageSize: 10,
           position: ["bottomCenter"],
           style: { marginTop: 50 },
         }}
