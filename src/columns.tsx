@@ -2,8 +2,6 @@ import { ToDoItem } from "./components/ToDoList";
 import moment from "moment";
 import { Tag } from "antd";
 import { ProColumns } from "@ant-design/pro-table";
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import DeleteTask from "./components/DeleteTask";
 
 export const columns: ProColumns<ToDoItem>[] = [
   {
@@ -78,10 +76,11 @@ export const columns: ProColumns<ToDoItem>[] = [
       { text: "Tags Present", value: "tagsPresent" },
     ],
     onFilter: (value, record) => {
-      if (value === "noTags") {
-        return !record.tags || record.tags.length === 0;
-      } else if (value === "tagsPresent") {
-        return record.tags && record.tags.length > 0;
+      if (value === "noTags" && (!record.tags || record.tags.length === 0)) {
+        return true;
+      }
+      if (value === "tagsPresent" && record.tags && record.tags.length > 0) {
+        return true;
       }
       return false;
     },
