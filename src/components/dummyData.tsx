@@ -1,6 +1,6 @@
 import { ToDoItem } from "./ToDoList";
 
-export const dummyData: ToDoItem[] = new Array(30).fill(0).map((_, index) => {
+export const dummyData: ToDoItem[] = new Array(80).fill(0).map((_, index) => {
   const tags = [];
   const randomTagCount = Math.floor(Math.random() * 4); // Assign any number of tags between 0 and 3
   for (let j = 1; j <= randomTagCount; j++) {
