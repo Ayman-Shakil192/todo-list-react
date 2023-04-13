@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.0.1",
     "@ant-design/pro-components": "^2.4.4",
     "@ant-design/pro-table": "^3.6.1",
     "@types/uuid": "^9.0.1",
