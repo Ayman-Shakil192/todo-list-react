@@ -60,6 +60,7 @@ export const columns: ProColumns<ToDoItem>[] = [
     formItemProps: {
       rules: [{ type: "array" }],
     },
+    editable: false,
     render: (_, { tags }) => (
       <span>
         {tags && tags.length > 0
