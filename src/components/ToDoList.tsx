@@ -1,8 +1,11 @@
-import React, { useState } from "react";
-import ProTable, { EditableProTable, ProColumns } from "@ant-design/pro-table";
+import { useState } from "react";
+import ProTable, { ProColumns } from "@ant-design/pro-table";
 import { dummyData } from "./dummyData";
 import { columns } from "../columns";
 import AddTask, { Task } from "./AddTask";
+import DeleteTask from "./DeleteTask";
+import { message } from "antd";
+import { EditOutlined } from "@ant-design/icons";
 
 export interface ToDoItem {
   key: string | number;
@@ -18,6 +21,7 @@ const ToDoList = () => {
   const [dataSource, setDataSource] = useState<ToDoItem[]>(dummyData);
   const [loading, setLoading] = useState<boolean>(false);
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [editableKeys, setEditableRowKeys] = useState<React.Key[]>([]);
 
   const handleTaskAdded = (task: Task) => {
     const newTask: ToDoItem = {
@@ -36,26 +40,91 @@ const ToDoList = () => {
     setDataSource([...dataSource, newTask]);
   };
 
+  const handleTaskDeleted = (taskId: string | number) => {
+    const newDataSource = dataSource.filter((task) => task.key !== taskId);
+    setDataSource(newDataSource);
+    console.log("Task deleted: ", taskId);
+  };
+
+  const actionColumn: ProColumns<ToDoItem> = {
+    title: "Actions",
+    dataIndex: "key",
+    valueType: "option",
+    width: 150,
+    render: (_text, record, _, action) => {
+      return (
+        <>
+          <a
+            key="editable"
+            onClick={() => {
+              action?.startEditable?.(record.key);
+            }}
+            style={{
+              marginRight: 16,
+            }}
+          >
+            Edit
+            <EditOutlined />
+          </a>
+          <DeleteTask
+            key={record.key}
+            onDelete={handleTaskDeleted}
+            taskId={record.key}
+          />
+        </>
+      );
+    },
+  };
+
   return (
     <>
       <ProTable<ToDoItem>
-        columns={columns}
-        dataSource={dataSource}
+        columns={[...columns, actionColumn]}
         rowKey="key"
         search={false}
+        loading={loading}
         toolBarRender={() => [<AddTask onTaskAdded={handleTaskAdded} />]}
         options={{
-          search: false,
-          setting: false,
-          fullScreen: false,
-          density: false,
+          search: true,
+          setting: true,
+          fullScreen: true,
+          density: true,
+          reload: true,
         }}
         pagination={{
           pageSize: 5,
           position: ["bottomCenter"],
           style: { marginTop: 50 },
         }}
-        loading={loading}
+        editable={{
+          type: "multiple",
+          editableKeys,
+          onChange: setEditableRowKeys,
+          onValuesChange(record, dataSource) {
+            console.log("onValuesChange: ", record);
+            setDataSource(dataSource);
+          },
+          onSave: async (key, row) => {
+            console.log("onSave: ", key, row);
+            message.success("Task updated");
+          },
+          actionRender: (row, config) => {
+            return [
+              <a
+                key="save"
+                onClick={() => {
+                  config?.onSave?.(row.key, row, row, undefined);
+                }}
+              >
+                Save
+              </a>,
+              <a key="cancel" onClick={() => config?.cancelEditable?.(row.key)}>
+                Cancel
+              </a>,
+            ];
+          },
+        }}
+        dataSource={dataSource}
       />
     </>
   );
