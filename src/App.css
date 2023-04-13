@@ -3,3 +3,19 @@
   padding: 0;
   box-sizing: border-box;
 }
+
+body {
+  font-family: "Poppins", sans-serif;
+}
+
+nav {
+  height: 50px;
+  padding: 25px;
+}
+
+footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80px;
+}
