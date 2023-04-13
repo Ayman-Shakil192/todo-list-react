@@ -104,42 +104,14 @@ export const columns: ProColumns<ToDoItem>[] = [
       { text: "OVERDUE", value: "OVERDUE" },
     ],
     onFilter: (value, { status }) => status === value,
-    render: (text, { status }) => {
+    render: (_text, { status }) => {
       const tagType = {
         OPEN: "blue",
         WORKING: "yellow",
         DONE: "green",
         OVERDUE: "red",
       }[status];
-      return <Tag color={tagType}>{status}</Tag>;
+      return <Tag color={tagType}>{status.toUpperCase()}</Tag>;
     },
-  },
-  {
-    title: "Actions",
-    valueType: "option",
-    width: 150,
-    render: () => [
-      <>
-        <a
-          style={{
-            marginRight: 20,
-          }}
-          key="edit"
-          onClick={() => {
-            console.log("Edit");
-          }}
-        >
-          Edit{" "}
-          <EditOutlined
-            style={{
-              color: "blue",
-              marginLeft: "5px",
-            }}
-          />
-        </a>
-        <DeleteTask />
-      </>,
-      ,
-    ],
   },
 ];
