@@ -2,7 +2,12 @@ import React, { useState } from "react";
 import { Button, Popconfirm, message } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 
-const DeleteTask: React.FC = () => {
+interface DeleteTaskProps {
+  taskId: string | number;
+  onDelete: (taskId: string | number) => void;
+}
+
+const DeleteTask: React.FC<DeleteTaskProps> = ({ taskId, onDelete }) => {
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
 
@@ -15,6 +20,7 @@ const DeleteTask: React.FC = () => {
     setTimeout(() => {
       setOpen(false);
       setConfirmLoading(false);
+      onDelete(taskId); // Call the onDelete callback with the taskId to be deleted
       message.success("Task deleted");
     }, 2000);
   };
@@ -35,7 +41,7 @@ const DeleteTask: React.FC = () => {
     >
       <Button
         danger
-        type="link"
+        type="text"
         onClick={showPopconfirm}
         style={{
           padding: 0,
