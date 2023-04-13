@@ -1,3 +1,4 @@
+// Importing required packages and components
 import { PlusOutlined } from "@ant-design/icons";
 import {
   ModalForm,
@@ -9,6 +10,7 @@ import {
 import { Button, Form, message } from "antd";
 import { v4 as uuid } from "uuid";
 
+// Function to simulate wait time
 const waitTime = (time: number = 100) => {
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -17,6 +19,7 @@ const waitTime = (time: number = 100) => {
   });
 };
 
+// Interface for defining task properties
 export interface Task {
   id: string;
   title: string;
@@ -27,10 +30,12 @@ export interface Task {
   timestamp: number;
 }
 
+// Props interface for CustomModal component
 interface CustomModalProps {
   onTaskAdded: (task: Task) => void;
 }
 
+// Interface for defining form values
 interface FormValues {
   title: string;
   description: string;
@@ -38,9 +43,12 @@ interface FormValues {
   tags?: string[];
 }
 
+// CustomModal component
 export default ({ onTaskAdded }: CustomModalProps) => {
+  // Initialize form
   const [form] = Form.useForm<FormValues>();
 
+  // Handle form submission
   const handleSubmit = async (formData: {
     title: string;
     description: string;
@@ -51,12 +59,14 @@ export default ({ onTaskAdded }: CustomModalProps) => {
 
     let tagsArray: string[] | undefined;
 
+    // Split tags string into an array
     if (typeof formData.tags === "string") {
       tagsArray = formData.tags.split(",");
     } else {
       tagsArray = formData.tags;
     }
 
+    // Create new task object
     const task: Task = {
       id: uuid(),
       title: formData.title,
@@ -66,14 +76,19 @@ export default ({ onTaskAdded }: CustomModalProps) => {
       status: "OPEN",
       timestamp: Date.now().valueOf(),
     };
+
+    // Log new task and call onTaskAdded callback function
     console.log(task);
     onTaskAdded(task);
+
+    // Display success message, reset form fields, and return true
     message.success("Task added successfully");
     form.resetFields();
     return true;
   };
 
   return (
+    // Render ModalForm component
     <ModalForm<{
       title: string;
       description: string;
@@ -83,6 +98,7 @@ export default ({ onTaskAdded }: CustomModalProps) => {
       title="Create a new task"
       form={form}
       trigger={
+        // Render Button component
         <Button type="primary">
           <PlusOutlined />
           Add Task
@@ -92,6 +108,7 @@ export default ({ onTaskAdded }: CustomModalProps) => {
       submitTimeout={2000}
       onFinish={handleSubmit}
     >
+      {/* Render form fields */}
       <ProForm.Group>
         <ProFormText
           width="md"
