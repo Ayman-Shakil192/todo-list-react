@@ -36,3 +36,11 @@ Start the server
   npm run dev
 ```
 
+# Tech stack used
+
+* [Vite](https://vitejs.dev/guide/)
+* [React](https://react.dev/)
+* [Ant Design Pro Components](https://procomponents.ant.design/en-US)
+* [TypeScript](https://www.typescriptlang.org/)
+
+
