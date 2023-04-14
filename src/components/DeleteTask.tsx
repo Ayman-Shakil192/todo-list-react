@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Popconfirm, message } from "antd";
+import { Button, message, Modal } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 
 interface DeleteTaskProps {
@@ -11,7 +11,7 @@ const DeleteTask: React.FC<DeleteTaskProps> = ({ taskId, onDelete }) => {
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
 
-  const showPopconfirm = () => {
+  const showModal = () => {
     setOpen(true);
   };
 
@@ -30,19 +30,11 @@ const DeleteTask: React.FC<DeleteTaskProps> = ({ taskId, onDelete }) => {
   };
 
   return (
-    <Popconfirm
-      title="Delete task"
-      description="Are you sure you want to delete this task?"
-      open={open}
-      onConfirm={handleOk}
-      okButtonProps={{ loading: confirmLoading }}
-      onCancel={handleCancel}
-      placement="left"
-    >
+    <>
       <Button
         danger
         type="text"
-        onClick={showPopconfirm}
+        onClick={showModal}
         style={{
           padding: 0,
           margin: 0,
@@ -51,7 +43,23 @@ const DeleteTask: React.FC<DeleteTaskProps> = ({ taskId, onDelete }) => {
         Delete
         <DeleteOutlined />
       </Button>
-    </Popconfirm>
+      <Modal
+        title="Delete task"
+        open={open}
+        okText="Delete"
+        onOk={handleOk}
+        confirmLoading={confirmLoading}
+        cancelText="Cancel"
+        onCancel={handleCancel}
+        centered={true}
+        okButtonProps={{
+          danger: true,
+          icon: <DeleteOutlined />,
+        }}
+      >
+        <p>Are you sure you want to delete this task?</p>
+      </Modal>
+    </>
   );
 };
 
