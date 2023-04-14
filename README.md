@@ -12,20 +12,74 @@ This is a web-based to-do list application built using Vite and devloped with Re
 
 # Lets get started
 
+Instead of using a mock API , a dummy data is created with random timestamps,title,description,due dates,tags and status to populate the table as follows.
+
+```javascript
+import { ToDoItem } from "./components/ToDoList";
+
+export const dummyData: ToDoItem[] = new Array(80).fill(0).map((_, index) => {
+  const tags = [];
+  const randomTagCount = Math.floor(Math.random() * 4); // Assign any number of tags between 0 and 3
+  for (let j = 1; j <= randomTagCount; j++) {
+    tags.push(`tag${j}`);
+  }
+  const randomDays = Math.floor(Math.random() * 365);
+  const randomHours = Math.floor(Math.random() * 24);
+  const randomMinutes = Math.floor(Math.random() * 60);
+  const randomSeconds = Math.floor(Math.random() * 60);
+  const createdAt = new Date(
+    Date.now() -
+      randomDays * 24 * 60 * 60 * 1000 -
+      randomHours * 60 * 60 * 1000 -
+      randomMinutes * 60 * 1000 -
+      randomSeconds * 1000
+  ).getTime();
+  const dueDate = new Date(
+    createdAt + Math.floor(Math.random() * 5 + 1) * 24 * 60 * 60 * 1000
+  ).getTime();
+  return {
+    key: index,
+    created: createdAt,
+    title: `Task ${index}`,
+    description: `Description for task ${index}`,
+    dueDate: dueDate,
+    tags: tags,
+    status: ["OPEN", "WORKING", "DONE", "OVERDUE"][
+      Math.floor(Math.random() * 4)
+    ],
+  };
+});
+
+```
+
+For screenshot purposes , pagination is set to 5 to display 5 records per page , it can be changed as per user convenience.
+
+```javascript
+<ProTable<DefaultType>
+  ...// other props
+  pagination={{
+          ...// other props
+          pageSize: preferredPageSize,
+        }}
+ />
+```
+
 ![ss1](https://user-images.githubusercontent.com/88003292/231910101-198fecee-96e3-49db-ade6-a34c57a6d87a.png)
 ![ss2](https://user-images.githubusercontent.com/88003292/231910105-a16a2355-8bce-40e7-98fa-20ef138615a2.png)
 ![ss3](https://user-images.githubusercontent.com/88003292/231910107-95bc3fd6-1159-4cda-985f-c178b85fe493.png)
+
+Tags and status can be filtered as shown
 
 ![ss2](https://user-images.githubusercontent.com/88003292/231910119-c1002da4-fb43-442b-8942-63ae5030e884.png)
 ![ss3](https://user-images.githubusercontent.com/88003292/231910120-bf30a0d3-f007-4124-8734-9372d3d1a018.png)
 ![ss1](https://user-images.githubusercontent.com/88003292/231910122-fe6143e1-fb67-4cbb-84c7-90570c74d805.png)
 
+Result 
+
 ![ss3](https://user-images.githubusercontent.com/88003292/231910129-f4348cd8-ea26-491b-8edd-3c641ca622f9.png)
 ![ss1](https://user-images.githubusercontent.com/88003292/231910131-e2f2eb8e-a83d-4acb-a24d-87846cb949d5.png)
 ![ss2](https://user-images.githubusercontent.com/88003292/231910132-f805fb12-5471-4ca7-86de-43e38dc2430a.png)
 
-![ss4](https://user-images.githubusercontent.com/88003292/231910157-ceb8adc2-deba-4142-9794-c57b085ab752.png)
-![ss5](https://user-images.githubusercontent.com/88003292/231910162-8a058bbd-b787-4180-b8ad-efd9ffd2094e.png)
 
 ![ss5](https://user-images.githubusercontent.com/88003292/231910170-3892766e-318c-4b3c-a878-522c28b2730c.png)
 ![ss4](https://user-images.githubusercontent.com/88003292/231910175-0dc20382-b896-4832-ab94-a18bb2b82c8c.png)
