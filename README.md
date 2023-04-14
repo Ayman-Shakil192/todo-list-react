@@ -10,6 +10,17 @@ This is a web-based to-do list application built using Vite and devloped with Re
 * User can perform operations like adding, modifying, and deleting to-do entries
 * User can perform a case-insensitive search for any task based on the data in any of the columns mentioned above.
 
+# Tech stack used
+
+* [Vite](https://vitejs.dev/guide/)
+* [React](https://react.dev/)
+* [Ant Design Pro Components](https://procomponents.ant.design/en-US)
+* [TypeScript](https://www.typescriptlang.org/)
+
+# Live site URL
+
+* [Live site](https://todo-list-react-ayman.netlify.app/)
+
 # Lets get started
 
 Instead of using a mock API , a dummy data is created with random timestamps,title,description,due dates,tags and status to populate the table as follows.
@@ -56,9 +67,9 @@ For screenshot purposes , pagination is set to 5 to display 5 records per page ,
 
 ```javascript
 <ProTable<DefaultType>
-  ...// other props
+  // other props
   pagination={{
-          ...// other props
+          // other props
           pageSize: preferredPageSize,
         }}
  />
@@ -132,16 +143,3 @@ Start the server
 ```bash
   npm run dev
 ```
-
-# Tech stack used
-
-* [Vite](https://vitejs.dev/guide/)
-* [React](https://react.dev/)
-* [Ant Design Pro Components](https://procomponents.ant.design/en-US)
-* [TypeScript](https://www.typescriptlang.org/)
-
-# Live site URL
-
-* [Live site](https://todo-list-react-ayman.netlify.app/)
-
-
