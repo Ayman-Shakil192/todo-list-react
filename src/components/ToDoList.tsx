@@ -74,7 +74,6 @@ const ToDoList = () => {
             }}
           >
             Edit
-            <EditOutlined />
           </a>
           <DeleteTask
             key={record.key}

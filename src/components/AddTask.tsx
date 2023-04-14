@@ -98,7 +98,7 @@ export default ({ onTaskAdded }: CustomModalProps) => {
       form={form}
       trigger={
         // Render Button component
-        <Button type="primary">
+        <Button type="primary" size="large">
           <PlusOutlined />
           Add Task
         </Button>

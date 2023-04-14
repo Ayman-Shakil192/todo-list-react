@@ -41,7 +41,6 @@ const DeleteTask: React.FC<DeleteTaskProps> = ({ taskId, onDelete }) => {
         }}
       >
         Delete
-        <DeleteOutlined />
       </Button>
       <Modal
         title="Delete task"
