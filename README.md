@@ -23,7 +23,7 @@ This is a web-based to-do list application built using Vite and devloped with Re
 
 # Lets get started
 
-Instead of using a mock API , a dummy data is created with random timestamps,title,description,due dates,tags and status to populate the table as follows.
+Instead of using a mock API , a dummy data is created with random timestamps,title,description,due dates,tags and status to populate the table which is implemented as follows :
 
 ```javascript
 import { ToDoItem } from "./components/ToDoList";
