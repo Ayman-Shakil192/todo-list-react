@@ -28,16 +28,19 @@ const ToDoList = () => {
   const [editableKeys, setEditableRowKeys] = useState<React.Key[]>([]);
 
   const handleTaskAdded = (task: Task) => {
+    // filter out duplicate tags
+    const newTags = task.tags
+      ? task.tags
+          .map((tag) => tag.trim())
+          .filter((tag, index, self) => self.indexOf(tag) === index) // filter out duplicates
+      : undefined;
     const newTask: ToDoItem = {
       key: task.id,
       created: Date.now(),
       title: task.title,
       description: task.description || "",
       dueDate: task.dueDate ? task.dueDate.valueOf() : undefined,
-      tags:
-        task.tags && task.tags.length > 0
-          ? task.tags.map((tag) => tag.trim())
-          : undefined,
+      tags: newTags,
       status: "OPEN",
     };
     setTasks([...tasks, task]);
