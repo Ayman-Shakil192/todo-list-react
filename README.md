@@ -26,54 +26,58 @@ This is a web-based to-do list application built using Vite and devloped with Re
 The timestamp,title,Due date,tags and status have all been randomly generated , I made use of a dummy Mock [Todo API](https://dummyjson.com/docs/todos) to generate descriptions for each and every task as shown below in the code 
 
 ```typescript
-import axios from "axios";
-import { ToDoItem } from "./components/ToDoList";
+const fetchData = () => {
+    axios
+      .get("https://dummyjson.com/todos?limit=150")
+      .then((response) => {
+        const todos = response.data.todos;
 
-const fetchData = async () => {
-  const response = await axios.get("https://dummyjson.com/todos?limit=150");
-  const todos = response.data.todos;
+        const data = todos.map((todo: any, index: number) => {
+          const randomDays = Math.floor(Math.random() * 365);
+          const randomHours = Math.floor(Math.random() * 24);
+          const randomMinutes = Math.floor(Math.random() * 60);
+          const randomSeconds = Math.floor(Math.random() * 60);
+          const createdAt = new Date(
+            Date.now() -
+              randomDays * 24 * 60 * 60 * 1000 -
+              randomHours * 60 * 60 * 1000 -
+              randomMinutes * 60 * 1000 -
+              randomSeconds * 1000
+          ).getTime();
+          const dueDate = new Date(
+            createdAt + Math.floor(Math.random() * 5 + 1) * 24 * 60 * 60 * 1000
+          ).getTime();
+          const selectedTags: string[] = [];
+          const selectedTagCount = Math.floor(Math.random() * 4);
+          for (let j = 1; j <= selectedTagCount; j++) {
+            selectedTags.push(`tag${j}`);
+          }
+          return {
+            key: index,
+            created: createdAt,
+            title: `Task ${index}`,
+            description: todo.todo,
+            dueDate: dueDate,
+            tags: selectedTags,
+            status: ["OPEN", "WORKING", "DONE", "OVERDUE"][
+              Math.floor(Math.random() * 4)
+            ],
+          };
+        }) as ToDoItem[];
 
-  const tags: string[] = [];
-  const randomTagCount = Math.floor(Math.random() * 4);
-  for (let j = 1; j <= randomTagCount; j++) {
-    tags.push(`tag${j}`);
-  }
+        setLoading(false);
+        setDataSource(data);
+      })
+      .catch((error) => {
+        setLoading(false);
+        console.error("Error fetching tasks: ", error);
+      });
+  };
 
-  return todos.map((todo: any, index: number) => {
-    const randomDays = Math.floor(Math.random() * 365);
-    const randomHours = Math.floor(Math.random() * 24);
-    const randomMinutes = Math.floor(Math.random() * 60);
-    const randomSeconds = Math.floor(Math.random() * 60);
-    const createdAt = new Date(
-      Date.now() -
-        randomDays * 24 * 60 * 60 * 1000 -
-        randomHours * 60 * 60 * 1000 -
-        randomMinutes * 60 * 1000 -
-        randomSeconds * 1000
-    ).getTime();
-    const dueDate = new Date(
-      createdAt + Math.floor(Math.random() * 5 + 1) * 24 * 60 * 60 * 1000
-    ).getTime();
-    const selectedTags: string[] = [];
-    const selectedTagCount = Math.floor(Math.random() * 4);
-    for (let j = 1; j <= selectedTagCount; j++) {
-      selectedTags.push(`tag${j}`);
-    }
-    return {
-      key: index,
-      created: createdAt,
-      title: `Task ${index}`,
-      description: todo.todo,
-      dueDate: dueDate,
-      tags: selectedTags,
-      status: ["OPEN", "WORKING", "DONE", "OVERDUE"][
-        Math.floor(Math.random() * 4)
-      ],
-    };
-  }) as ToDoItem[];
-};
-
-export const dummyData: ToDoItem[] = await fetchData();
+  useEffect(() => {
+    setLoading(true);
+    fetchData();
+  }, []);
 ```
 
 ## Run Locally
