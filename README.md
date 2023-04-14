@@ -74,19 +74,35 @@ Result
 
 ![ss3](https://user-images.githubusercontent.com/88003292/231910107-95bc3fd6-1159-4cda-985f-c178b85fe493.png)
 
+Adding a task
+
 ![ss4](https://user-images.githubusercontent.com/88003292/231910175-0dc20382-b896-4832-ab94-a18bb2b82c8c.png)
+
+Validation for empty fields
 
 ![ss5](https://user-images.githubusercontent.com/88003292/231910170-3892766e-318c-4b3c-a878-522c28b2730c.png)
 
+Task added
+
 ![ss6](https://user-images.githubusercontent.com/88003292/231910192-9a500cf3-0a4d-4f36-ba1e-98400207f97f.png)
+
+Asking confirmation from user to delete task
 
 ![ss7](https://user-images.githubusercontent.com/88003292/231910206-79be1ddf-607b-452d-a4c5-63d2b58ad0e7.png)
 
+Task deleted
+
 ![ss8](https://user-images.githubusercontent.com/88003292/231910219-ea5e90d3-1987-4d59-ac28-f2411c848f1a.png)
+
+Editing a task
 
 ![ss9](https://user-images.githubusercontent.com/88003292/231910251-1e1340e5-8e0b-430b-bc42-8384d7c055db.png)
 
+Updating the fields 
+
 ![ss10](https://user-images.githubusercontent.com/88003292/231910278-ba150294-9142-4ecb-b627-c8bbceafe506.png)
+
+Task Edited
 
 ![ss11](https://user-images.githubusercontent.com/88003292/231910301-6d9ff639-8021-4678-93e1-9ca3f7b19044.png)
 
