@@ -47,7 +47,6 @@ export default ({ onTaskAdded }: CustomModalProps) => {
   // Initialize form
   const [form] = Form.useForm<FormValues>();
 
-  // Handle form submission
   const handleSubmit = async (formData: {
     title: string;
     description: string;
@@ -70,7 +69,10 @@ export default ({ onTaskAdded }: CustomModalProps) => {
       id: uuid(),
       title: formData.title,
       description: formData.description,
-      dueDate: formData.dueDate,
+      dueDate:
+        formData.dueDate instanceof Array
+          ? formData.dueDate[1]
+          : formData.dueDate,
       tags: tagsArray,
       status: "OPEN",
       timestamp: Date.now().valueOf(),
@@ -113,14 +115,23 @@ export default ({ onTaskAdded }: CustomModalProps) => {
           width="md"
           name="title"
           label="Title"
-          rules={[{ required: true, message: "Please enter a title" }]}
+          rules={[
+            { required: true, message: "Please enter a title" },
+            { max: 100, message: "Title cannot exceed 100 words" },
+          ]}
           placeholder="Enter a title "
         />
         <ProFormText
           width="md"
           name="description"
           label="Description"
-          rules={[{ required: true, message: "Please enter the description" }]}
+          rules={[
+            { required: true, message: "Please enter the description" },
+            {
+              max: 1000,
+              message: "Description cannot exceed 1000 words",
+            },
+          ]}
           placeholder="Enter a description"
         />
         <ProFormDateRangePicker width="md" name="dueDate" label="Due Date" />
