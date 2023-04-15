@@ -1,12 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ProTable, { ProColumns } from "@ant-design/pro-table";
-import { EditOutlined, ReloadOutlined } from "@ant-design/icons";
-import { dummyData } from "../dummyData";
 import { columns } from "../columns";
 import AddTask, { Task } from "./AddTask";
 import DeleteTask from "./DeleteTask";
 import { message } from "antd";
 import { Input } from "antd";
+import axios from "axios";
 import React from "react";
 
 export interface ToDoItem {
@@ -22,10 +21,64 @@ export interface ToDoItem {
 const { Search } = Input;
 
 const ToDoList = () => {
-  const [dataSource, setDataSource] = useState<ToDoItem[]>(dummyData);
+  const [dataSource, setDataSource] = useState<ToDoItem[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [editableKeys, setEditableRowKeys] = useState<React.Key[]>([]);
+
+  // Populating the table with dummy data
+  const fetchData = () => {
+    axios
+      .get("https://dummyjson.com/todos?limit=150")
+      .then((response) => {
+        const todos = response.data.todos;
+
+        const data = todos.map((todo: any, index: number) => {
+          const randomDays = Math.floor(Math.random() * 365);
+          const randomHours = Math.floor(Math.random() * 24);
+          const randomMinutes = Math.floor(Math.random() * 60);
+          const randomSeconds = Math.floor(Math.random() * 60);
+          const createdAt = new Date(
+            Date.now() -
+              randomDays * 24 * 60 * 60 * 1000 -
+              randomHours * 60 * 60 * 1000 -
+              randomMinutes * 60 * 1000 -
+              randomSeconds * 1000
+          ).getTime();
+          const dueDate = new Date(
+            createdAt + Math.floor(Math.random() * 5 + 1) * 24 * 60 * 60 * 1000
+          ).getTime();
+          const selectedTags: string[] = [];
+          const selectedTagCount = Math.floor(Math.random() * 4);
+          for (let j = 1; j <= selectedTagCount; j++) {
+            selectedTags.push(`tag${j}`);
+          }
+          return {
+            key: index,
+            created: createdAt,
+            title: `Task ${index}`,
+            description: todo.todo,
+            dueDate: dueDate,
+            tags: selectedTags,
+            status: ["OPEN", "WORKING", "DONE", "OVERDUE"][
+              Math.floor(Math.random() * 4)
+            ],
+          };
+        }) as ToDoItem[];
+
+        setLoading(false);
+        setDataSource(data);
+      })
+      .catch((error) => {
+        setLoading(false);
+        console.error("Error fetching tasks: ", error);
+      });
+  };
+
+  useEffect(() => {
+    setLoading(true);
+    fetchData();
+  }, []);
 
   const handleTaskAdded = (task: Task) => {
     // filter out duplicate tags
@@ -86,23 +139,15 @@ const ToDoList = () => {
   };
 
   const onSearch = (value: string) => {
-    console.log("Search value: ", value);
-    const filteredDataSource = dummyData.filter(
+    const filteredDataSource = dataSource.filter(
       (task) =>
         task.title.toLowerCase().includes(value.toLowerCase()) ||
-        task.description.toLowerCase().includes(value.toLowerCase())
+        task.description.toLowerCase().includes(value.toLowerCase()) ||
+        task.tags?.includes(value.toLowerCase()) ||
+        task.status.toLowerCase().includes(value.toLowerCase())
     );
     console.log("Filtered data source: ", filteredDataSource);
     setDataSource(filteredDataSource);
-  };
-
-  const handleReload = () => {
-    setLoading(true);
-    setTimeout(() => {
-      setDataSource(dummyData);
-      setLoading(false);
-      message.success("Tasks reloaded");
-    }, 1000);
   };
 
   return (
@@ -134,13 +179,6 @@ const ToDoList = () => {
               <div>
                 <AddTask onTaskAdded={handleTaskAdded} />
               </div>
-              <div
-                style={{
-                  marginLeft: 10,
-                }}
-              >
-                <ReloadOutlined onClick={handleReload} />
-              </div>
             </div>
           </div>,
         ]}
@@ -148,11 +186,11 @@ const ToDoList = () => {
           setting: true,
           fullScreen: false,
           density: true,
-          reload: false,
+          reload: fetchData,
         }}
         search={false}
         pagination={{
-          pageSize: 10,
+          pageSize: 5,
           position: ["bottomCenter"],
           style: { marginTop: 50 },
         }}
