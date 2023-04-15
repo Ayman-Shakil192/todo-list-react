@@ -24,6 +24,7 @@ const ToDoList = () => {
   const [dataSource, setDataSource] = useState<ToDoItem[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [pageSize, setPageSize] = useState<number>(5);
   const [editableKeys, setEditableRowKeys] = useState<React.Key[]>([]);
 
   // Populating the table with dummy data
@@ -167,6 +168,7 @@ const ToDoList = () => {
                 placeholder="Search for tasks"
                 onSearch={onSearch}
                 size="large"
+                style={{ width: 300 }}
               />
             </div>
             <div
@@ -186,13 +188,22 @@ const ToDoList = () => {
           setting: true,
           fullScreen: false,
           density: true,
-          reload: fetchData,
+          reload: () => {
+            setLoading(true);
+            fetchData();
+          },
         }}
         search={false}
         pagination={{
-          pageSize: 5,
+          pageSize: pageSize,
           position: ["bottomCenter"],
           style: { marginTop: 50 },
+          pageSizeOptions: ["5", "10", "15", "20"],
+          onChange: (_page, pageSize) => {
+            setPageSize(pageSize);
+          },
+          showTotal: (total, range) =>
+            `${range[0]}-${range[1]} of ${total} tasks`,
         }}
         editable={{
           type: "multiple",
