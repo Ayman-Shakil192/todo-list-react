@@ -21,65 +21,18 @@ This is a web-based to-do list application built using Vite and devloped with Re
 
 * [Live site](https://todo-list-react-ayman.netlify.app/)
 
-# Populating the table data
+# Working
 
-The timestamp,title,Due date,tags and status have all been randomly generated , I made use of a dummy Mock [Todo API](https://dummyjson.com/docs/todos) to generate descriptions for each and every task as shown below in the code 
+Here is a video demonstration showing the functionalities and working of the application.
 
-```typescript
-const fetchData = () => {
-    axios
-      .get("https://dummyjson.com/todos?limit=150")
-      .then((response) => {
-        const todos = response.data.todos;
+* The application supports pagination and can display upto 5,10,15 and 20 tasks per page
+* User's can sort the Timestamp created, Title, Description and Due Date columns in ascending and descending order 
+* User's can filter Tags based on their presence (Present or Not present) and STATUS based on their values like (OPEN,WORKING,DONE,OVERDUE)
+* User's can add task's which by default is set to OPEN status and the Timestamp is generated automatically on the time of creation
+* User's can modify tasks and even delete them based on their preferences
+* User's can perform a case insensitive search on either fields to search for a particular task.
 
-        const data = todos.map((todo: any, index: number) => {
-          const randomDays = Math.floor(Math.random() * 365);
-          const randomHours = Math.floor(Math.random() * 24);
-          const randomMinutes = Math.floor(Math.random() * 60);
-          const randomSeconds = Math.floor(Math.random() * 60);
-          const createdAt = new Date(
-            Date.now() -
-              randomDays * 24 * 60 * 60 * 1000 -
-              randomHours * 60 * 60 * 1000 -
-              randomMinutes * 60 * 1000 -
-              randomSeconds * 1000
-          ).getTime();
-          const dueDate = new Date(
-            createdAt + Math.floor(Math.random() * 5 + 1) * 24 * 60 * 60 * 1000
-          ).getTime();
-          const selectedTags: string[] = [];
-          const selectedTagCount = Math.floor(Math.random() * 4);
-          for (let j = 1; j <= selectedTagCount; j++) {
-            selectedTags.push(`tag${j}`);
-          }
-          return {
-            key: index,
-            created: createdAt,
-            title: `Task ${index}`,
-            description: todo.todo,
-            dueDate: dueDate,
-            tags: selectedTags,
-            status: ["OPEN", "WORKING", "DONE", "OVERDUE"][
-              Math.floor(Math.random() * 4)
-            ],
-          };
-        }) as ToDoItem[];
-
-        setLoading(false);
-        setDataSource(data);
-      })
-      .catch((error) => {
-        setLoading(false);
-        console.error("Error fetching tasks: ", error);
-      });
-  };
-
-  useEffect(() => {
-    setLoading(true);
-    fetchData();
-  }, []);
-```
-
+https://user-images.githubusercontent.com/88003292/232334817-baeced86-88da-490e-862c-1334e09a3755.mp4
 
 ## Run Locally
 
