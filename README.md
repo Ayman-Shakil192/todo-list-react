@@ -80,11 +80,6 @@ const fetchData = () => {
   }, []);
 ```
 
-# Working 
-
-Here is a detailed video description of all the functionalities provided by the website
-
-https://user-images.githubusercontent.com/88003292/232209996-e14b8fc8-b0ce-47d9-bf37-ef8528b260c4.mp4
 
 ## Run Locally
 
