@@ -55,22 +55,26 @@ export const columns: ProColumns<ToDoItem>[] = [
     title: "Tags",
     dataIndex: "tags",
     width: 150,
-    formItemProps: {
-      rules: [{ type: "array" }],
-    },
     ellipsis: true,
-    editable: false,
-    render: (_, { tags }) => (
-      <span>
-        {tags && tags.length > 0
-          ? tags.map((tag) => (
-              <Tag key={tag} color="purple">
-                {tag.toUpperCase()}
-              </Tag>
-            ))
-          : "No tags added"}
-      </span>
-    ),
+    render: (_, { tags }) => {
+      if (!Array.isArray(tags)) {
+        tags = tags
+          ? (tags as string).split(",").map((tag: string) => tag.trim())
+          : [];
+      }
+      tags = [...new Set(tags)];
+      return (
+        <span>
+          {Array.isArray(tags) && tags.length > 0
+            ? tags.map((tag) => (
+                <Tag key={tag} color="purple">
+                  {tag.toUpperCase()}
+                </Tag>
+              ))
+            : "No tags added"}
+        </span>
+      );
+    },
     filters: [
       { text: "No Tags", value: "noTags" },
       { text: "Tags Present", value: "tagsPresent" },
@@ -107,6 +111,10 @@ export const columns: ProColumns<ToDoItem>[] = [
     onFilter: (value, { status }) => status === value,
     render: (_text, { status }) => {
       const tagType = {
+        open: "blue",
+        working: "yellow",
+        done: "green",
+        overdue: "red",
         OPEN: "blue",
         WORKING: "yellow",
         DONE: "green",

@@ -209,8 +209,7 @@ const ToDoList = () => {
           type: "multiple",
           editableKeys,
           onChange: setEditableRowKeys,
-          onValuesChange(record, dataSource) {
-            console.log("onValuesChange: ", record);
+          onValuesChange(_record, dataSource) {
             setDataSource(dataSource);
           },
           onSave: async (key, row) => {
